@@ -21,7 +21,6 @@ Este proyecto es una aplicación web desarrollada con **PHP**, **MySQL**, **HTML
 | **PHP** | Lógica del servidor y conexión con la base de datos |
 | **MySQL** | Almacenamiento y gestión de datos |
 | **HTML5** | Estructura de la interfaz de usuario |
-| **CSS3** | Estilos y diseño visual |
 | **XAMPP / Laragon** | Entorno local de desarrollo (Apache + MySQL) |
 
 ---
