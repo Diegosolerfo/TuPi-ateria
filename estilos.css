@@ -1,0 +1,25 @@
+.es1{
+    background-color: pink;
+    padding: 40px;
+}
+.tabla{
+    border: 1px solid black;
+    border-radius: 20px;
+}
+.imagen{
+    width: 50px;
+    height: 40px;
+}
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(180, 66, 180);
+}
+.navegador{
+    margin-bottom: 20px;
+    background-color: #e981b3;
+    padding: 10px;
+}
+li a{
+    color: purple;
+    margin-left: 10px;
+}
