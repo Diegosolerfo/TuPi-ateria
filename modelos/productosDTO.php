@@ -1,5 +1,7 @@
 <?php
-    class productosdto{
+namespace App\modelos;
+
+class ProductosDTO {
         private $id;
         private $nombre;
         private $descripcion;

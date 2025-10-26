@@ -1,3 +1,11 @@
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use App\modelos\TiposDAO;
+
+$tiposDAO = new TiposDAO();
+$tipos = $tiposDAO->listar_tipos();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

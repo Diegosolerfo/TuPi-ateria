@@ -1,15 +1,16 @@
 <?php
-    require_once '../modelos/tiposDAO.php';
-    require_once '../modelos/tiposDTO.php';
-    require_once '../modelos/conexion.php';
-    var_dump($_POST);
+namespace App\controladores;
+
+use App\modelos\TiposDAO;
+use App\modelos\TiposDTO;
+use App\modelos\Conexion;
         if($_POST["accion"] == "registrar"){
-        $tiposDTO = new tiposdto();
-        $tiposDTO->setNombre($_POST["nombre"]);
+        $tiposDTO = new TiposDTO();
+        $tiposDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
         $tiposDTO->setDescripcion($_POST["descripcion"]);
         $tiposDTO->setEvento($_POST["evento"]);
 
-        $tiposDAO = new tiposdao();
+        $tiposDAO = new TiposDAO();
         $resultado = $tiposDAO->registrar_tipo($tiposDTO);
         if($resultado === true){
             header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo registrado exitosamente");
@@ -18,13 +19,13 @@
         }
     }
     elseif($_POST["accion"] == "editar"){
-        $tiposDTO = new tiposdto();
+        $tiposDTO = new TiposDTO();
         $tiposDTO->setId($_POST["id"]);
-        $tiposDTO->setNombre($_POST["nombre"]);
-        $tiposDTO->setDescripcion($_POST["descripcion"]);
-        $tiposDTO->setEvento($_POST["evento"]);
+        $tiposDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
+        $tiposDTO->setDescripcion(htmlspecialchars(trim($_POST["descripcion"]), ENT_QUOTES, 'UTF-8'));
+        $tiposDTO->setEvento(htmlspecialchars(trim($_POST["evento"]), ENT_QUOTES, 'UTF-8'));
 
-        $tiposDAO = new tiposdao();
+        $tiposDAO = new TiposDAO();
         $resultado = $tiposDAO->actualizar_tipo($tiposDTO);
         if($resultado === true){
             header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo actualizado exitosamente");
@@ -33,7 +34,7 @@
         }
     } elseif($_POST["accion"] == "eliminar"){
         $id = $_POST["id"];
-        $tiposDAO = new tiposdao();
+        $tiposDAO = new TiposDAO();
         $resultado = $tiposDAO->eliminar_tipo($id);
         if($resultado === true){
                 header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo eliminado exitosamente");

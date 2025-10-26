@@ -1,17 +1,18 @@
 <?php
-    require_once '../modelos/productosDAO.php';
-    require_once '../modelos/productosDTO.php';
-    require_once '../modelos/conexion.php';
-    var_dump($_POST);
-        if($_POST["accion"] == "registrar"){
-        $productosDTO = new productosdto();
-        $productosDTO->setNombre($_POST["nombre"]);
-        $productosDTO->setDescripcion($_POST["descripcion"]);
-        $productosDTO->setPrecio($_POST["precio"]);
-        $productosDTO->setEspecificaciones($_POST["especificaciones"]);
-        $productosDTO->setTipoProducto($_POST["Tipo_Producto"]);
+require_once __DIR__ . '/../vendor/autoload.php';
 
-        $productosDAO = new productosdao();
+use App\modelos\ProductosDAO;
+use App\modelos\ProductosDTO;
+use App\modelos\Conexion;
+        if($_POST["accion"] == "registrar"){
+        $productosDTO = new ProductosDTO();
+        $productosDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setDescripcion(htmlspecialchars(trim($_POST["descripcion"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setPrecio(filter_var($_POST["precio"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
+        $productosDTO->setEspecificaciones(htmlspecialchars(trim($_POST["especificaciones"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setTipoProducto(htmlspecialchars(trim($_POST["Tipo_Producto"]), ENT_QUOTES, 'UTF-8'));
+
+        $productosDAO = new ProductosDAO();
         $resultado = $productosDAO->registrar_producto($productosDTO);
         if($resultado === true){
             header("Location: ../vista/productos.php?mensaje=Producto registrado exitosamente");
@@ -20,27 +21,24 @@
         }
     }
     elseif($_POST["accion"] == "editar"){
-        $productosDTO = new productosdto();
+        $productosDTO = new ProductosDTO();
         $productosDTO->setId($_POST["id"]);
-        $productosDTO->setNombre($_POST["nombre"]);
-        $productosDTO->setDescripcion($_POST["descripcion"]);
-        $productosDTO->setPrecio($_POST["precio"]);
-        $productosDTO->setEspecificaciones($_POST["especificaciones"]);
-        $productosDTO->setTipoProducto($_POST["Tipo_Producto"]);
+        $productosDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setDescripcion(htmlspecialchars(trim($_POST["descripcion"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setPrecio(filter_var($_POST["precio"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
+        $productosDTO->setEspecificaciones(htmlspecialchars(trim($_POST["especificaciones"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setTipoProducto(htmlspecialchars(trim($_POST["Tipo_Producto"]), ENT_QUOTES, 'UTF-8'));
 
-        $productosDAO = new productosdao();
+        $productosDAO = new ProductosDAO();
         $resultado = $productosDAO->actualizar_producto($productosDTO);
         if($resultado === true){
             header("Location: ../vista/productos.php?mensaje=Producto actualizado exitosamente");
         }else{
-            var_dump($resultado);
-            var_dump();
-            var_dump();
-            //header("Location: ../vista/productos.php?error=" . urlencode($resultado));
+            header("Location: ../vista/productos.php?error=" . urlencode($resultado));
         }
     } elseif($_POST["accion"] == "eliminar"){
         $id = $_POST["id"];
-        $productosDAO = new productosdao();
+        $productosDAO = new ProductosDAO();
         $resultado = $productosDAO->eliminar_producto($id);
         if($resultado === true){
                 header("Location: ../vista/productos.php?mensaje=Producto eliminado exitosamente");

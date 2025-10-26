@@ -1,9 +1,13 @@
 <?php
-    require_once 'conexion.php';
-    require_once 'tiposDAO.php';
+namespace App\modelos;
 
-    class tiposdao{
-        public function registrar_tipo(tiposdto $tipo){
+use PDO;
+use PDOException;
+use App\modelos\Conexion;
+use App\modelos\TiposDTO;
+
+class TiposDAO {
+        public function registrar_tipo(TiposDTO $tipo){
             $conexion = conexion::getConexion();
             $sql = "INSERT INTO tipos (NOMBRE, DESCRIPCION, EVENTO)
                     VALUES (?, ?, ?);";

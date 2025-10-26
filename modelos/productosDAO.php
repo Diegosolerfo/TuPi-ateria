@@ -1,16 +1,19 @@
 <?php
-    require_once 'conexion.php';
-    require_once 'productosdto.php';
+namespace App\modelos;
 
-    class productosdao{
-        public function registrar_producto(productosdto $productosdto) {
-            $conexion = conexion::getConexion();
-            $nombre = $productosdto->getNombre();
-            $descripcion = $productosdto->getDescripcion();
-            $precio = $productosdto->getPrecio();
-            $especificaciones = $productosdto->getEspecificaciones();
-            $tipo_producto = $productosdto->getTipoProducto();
-            var_dump($tipo_producto);
+use PDO;
+use PDOException;
+use App\modelos\Conexion;
+use App\modelos\ProductosDTO;
+
+class ProductosDAO {
+        public function registrar_producto(ProductosDTO $productosDTO) {
+            $conexion = Conexion::getConexion();
+            $nombre = $productosDTO->getNombre();
+            $descripcion = $productosDTO->getDescripcion();
+            $precio = $productosDTO->getPrecio();
+            $especificaciones = $productosDTO->getEspecificaciones();
+            $tipo_producto = $productosDTO->getTipoProducto();
             $sql = "INSERT INTO productos (NOMBRE, DESCRIPCION, PRECIO, ESPECIFICACIONES, TIPO_PRODUCTO)
                     VALUES (?, ?, ?, ?, ?);";
             try {
@@ -26,7 +29,7 @@
             }
         }
         public function obtener_producto($id) {
-            $conexion = conexion::getConexion();
+            $conexion = Conexion::getConexion();
             $sql = "SELECT * FROM productos WHERE ID = ?;";
             try {
                 $stmt = $conexion->prepare($sql);
@@ -38,7 +41,7 @@
             }
         }
         public function listar_productos() {
-            $conexion = conexion::getConexion();
+            $conexion = Conexion::getConexion();
             $sql = "SELECT * FROM productos;";
             try {
                 $stmt = $conexion->prepare($sql);
@@ -48,14 +51,14 @@
                 return "Error al listar productos: " . $e->getMessage();
             }
         }
-        public function actualizar_producto(productosdto $productosdto){
-            $conexion = conexion::getConexion();
-            $id = $productosdto->getId();
-            $nombre = $productosdto->getNombre();
-            $descripcion = $productosdto->getDescripcion();
-            $precio = $productosdto->getPrecio();
-            $especificaciones = $productosdto->getEspecificaciones();
-            $tipo_producto = $productosdto->getTipoProducto();
+        public function actualizar_producto(ProductosDTO $productosDTO){
+            $conexion = Conexion::getConexion();
+            $id = $productosDTO->getId();
+            $nombre = $productosDTO->getNombre();
+            $descripcion = $productosDTO->getDescripcion();
+            $precio = $productosDTO->getPrecio();
+            $especificaciones = $productosDTO->getEspecificaciones();
+            $tipo_producto = $productosDTO->getTipoProducto();
             $sql = "UPDATE productos
                     SET NOMBRE = ?, DESCRIPCION = ?, PRECIO = ?, ESPECIFICACIONES = ?, TIPO_PRODUCTO = ?
                     WHERE ID = ?;";

@@ -1,5 +1,7 @@
 <?php
-    class tiposdto{
+namespace App\modelos;
+
+class TiposDTO {
         private $id;
         private $nombre;
         private $evento;

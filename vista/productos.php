@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use App\modelos\TiposDAO;
+use App\modelos\ProductosDAO;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,8 +38,7 @@
                     <input type="text" class="form-control" id="especificaciones" name="especificaciones" required>
                 </div>
                 <?php
-                    include_once '../modelos/tiposDAO.php';
-                    $objeto = new tiposdao;
+                    $objeto = new TiposDAO();
                     $respuesta = $objeto->listar_tipos();
                 ?>
                 <div class="mb-3">
