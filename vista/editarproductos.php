@@ -6,8 +6,8 @@ use App\modelos\TiposDAO;
 
 $productosDAO = new ProductosDAO();
 $tiposDAO = new TiposDAO();
-$producto = $productosDAO->obtener_producto($_GET['id']);
-$tipos = $tiposDAO->listar_tipos();
+$producto = $productosDAO->obtenerProducto($_GET['id']);
+$tipos = $tiposDAO->listarTipos();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +20,8 @@ $tipos = $tiposDAO->listar_tipos();
 </head>
 <body>
     <div class="container navbar-expand-lg navegador">
-        <?php include 'menu.php'; ?>
+        <?php require_once 'menu.php'; ?>
     </div>
-    <?php
-        require_once '../modelos/productosDAO.php';
-        $productosDAO = new productosdao();
-        $producto = $productosDAO->obtener_producto($_GET['id']);
-    ?>
     <div class="container">
         <div style="margin: 20px;">
             <h2>Editar Producto</h2>
@@ -50,16 +45,11 @@ $tipos = $tiposDAO->listar_tipos();
                     <label for="especificaciones" class="form-label">Especificaciones:</label>
                     <input type="text" class="form-control" id="especificaciones" name="especificaciones" value="<?php echo $producto['especificaciones']; ?>" required>
                 </div>
-                <?php
-                    include_once '../modelos/tiposDAO.php';
-                    $objeto = new tiposdao;
-                    $respuesta = $objeto->listar_tipos();
-                ?>
                 <div class="mb-3">
                     <label for="tipo_producto" class="form-label">Tipo de Producto:</label>
                     <select name="Tipo_Producto" id="Tipo_Producto" class="form-select">
                         <?php
-                            foreach($respuesta as $tipo){
+                            foreach($tipos as $tipo){
                                 $selected = ($producto['tipo_producto'] == $tipo['id']) ? 'selected' : '';
                                 echo '<option value="'.$tipo["id"].'" '.$selected.'>'.$tipo["nombre"].'</option>';
                             }

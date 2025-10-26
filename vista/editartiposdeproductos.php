@@ -17,13 +17,8 @@ $tipo = $tiposDAO->obtener_tipo($_GET['id']);
 </head>
 <body>
     <div class="container navbar-expand-lg navegador">
-        <?php include 'menu.php'; ?>
+        <?php require_once 'menu.php'; ?>
     </div>
-    <?php
-        require_once '../modelos/tiposDAO.php';
-        $tiposDAO = new tiposdao();
-        $tipo = $tiposDAO->obtener_tipo($_GET['id']);
-    ?>
     <div class="container">
         <div style="margin: 20px;">
             <h2>Editar Tipo de Producto</h2>

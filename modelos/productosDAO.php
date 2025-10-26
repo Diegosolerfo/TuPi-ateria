@@ -7,83 +7,66 @@ use App\modelos\Conexion;
 use App\modelos\ProductosDTO;
 
 class ProductosDAO {
-        public function registrar_producto(ProductosDTO $productosDTO) {
-            $conexion = Conexion::getConexion();
-            $nombre = $productosDTO->getNombre();
-            $descripcion = $productosDTO->getDescripcion();
-            $precio = $productosDTO->getPrecio();
-            $especificaciones = $productosDTO->getEspecificaciones();
-            $tipo_producto = $productosDTO->getTipoProducto();
-            $sql = "INSERT INTO productos (NOMBRE, DESCRIPCION, PRECIO, ESPECIFICACIONES, TIPO_PRODUCTO)
-                    VALUES (?, ?, ?, ?, ?);";
-            try {
-                $stmt = $conexion->prepare($sql);
-                $stmt->bindParam(1, $nombre);
-                $stmt->bindParam(2, $descripcion);
-                $stmt->bindParam(3, $precio);
-                $stmt->bindParam(4, $especificaciones);
-                $stmt->bindParam(5, $tipo_producto);
-                return $stmt->execute();
-            } catch (PDOException $e) {
-                return "Error al registrar producto: " . $e->getMessage();
-            }
-        }
-        public function obtener_producto($id) {
-            $conexion = Conexion::getConexion();
-            $sql = "SELECT * FROM productos WHERE ID = ?;";
-            try {
-                $stmt = $conexion->prepare($sql);
-                $stmt->bindParam(1, $id);
-                $stmt->execute();
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-            } catch (PDOException $e) {
-                return "Error al obtener producto: " . $e->getMessage();
-            }
-        }
-        public function listar_productos() {
-            $conexion = Conexion::getConexion();
-            $sql = "SELECT * FROM productos;";
-            try {
-                $stmt = $conexion->prepare($sql);
-                $stmt->execute();
+    private $conexion;
+    public function __construct() {
+        $this->conexion = Conexion::getConexion();
+    }
+    private function ejecutarConsulta(string $sql, array $parametros = [], bool $retornarDatos = false) {
+        try {
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute($parametros);
+
+            if ($retornarDatos) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } catch (PDOException $e) {
-                return "Error al listar productos: " . $e->getMessage();
             }
-        }
-        public function actualizar_producto(ProductosDTO $productosDTO){
-            $conexion = Conexion::getConexion();
-            $id = $productosDTO->getId();
-            $nombre = $productosDTO->getNombre();
-            $descripcion = $productosDTO->getDescripcion();
-            $precio = $productosDTO->getPrecio();
-            $especificaciones = $productosDTO->getEspecificaciones();
-            $tipo_producto = $productosDTO->getTipoProducto();
-            $sql = "UPDATE productos
-                    SET NOMBRE = ?, DESCRIPCION = ?, PRECIO = ?, ESPECIFICACIONES = ?, TIPO_PRODUCTO = ?
-                    WHERE ID = ?;";
-            try {
-                $stmt = $conexion->prepare($sql);
-                $stmt->bindParam(1, $nombre);
-                $stmt->bindParam(2, $descripcion);
-                $stmt->bindParam(3, $precio);
-                $stmt->bindParam(4, $especificaciones);
-                $stmt->bindParam(5, $tipo_producto);
-                $stmt->bindParam(6, $id);
-                return $stmt->execute();
-            } catch (PDOException $e) {
-                return "Error al actualizar producto: " . $e->getMessage();
-            }
-        }
-        public function eliminar_producto($id){
-            $conexion = conexion::getConexion();
-            $sql = "DELETE FROM productos WHERE ID = ?;";
-            try {
-                $stmt = $conexion->prepare($sql);
-                $stmt->bindParam(1, $id);
-                return $stmt->execute();
-            } catch (PDOException $e) {
-                return "Error al eliminar producto: " . $e->getMessage();
-            }
+
+            return true;
+        } catch (PDOException $e) {
+            return "Error en la consulta: " . $e->getMessage();
         }
     }
+    private function extraerDatosProducto(ProductosDTO $p, bool $incluirId = false): array {
+        $datos = [
+            $p->getNombre(),
+            $p->getDescripcion(),
+            $p->getPrecio(),
+            $p->getEspecificaciones(),
+            $p->getTipoProducto()
+        ];
+
+        if ($incluirId) {
+            $datos[] = $p->getId();
+        }
+
+        return $datos;
+    }
+    public function registrarProducto(ProductosDTO $productosDTO) {
+        $sql = "INSERT INTO productos (NOMBRE, DESCRIPCION, PRECIO, ESPECIFICACIONES, TIPO_PRODUCTO)
+                VALUES (?, ?, ?, ?, ?);";
+        return $this->ejecutarConsulta($sql, $this->extraerDatosProducto($productosDTO));
+    }
+    public function obtenerProducto($id) {
+        $sql = "SELECT * FROM productos WHERE ID = ?;";
+        try {
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return "Error al obtener producto: " . $e->getMessage();
+        }
+    }
+    public function listarProductos() {
+        $sql = "SELECT * FROM productos;";
+        return $this->ejecutarConsulta($sql, [], true);
+    }
+    public function actualizarProducto(ProductosDTO $productosDTO) {
+        $sql = "UPDATE productos
+                SET NOMBRE = ?, DESCRIPCION = ?, PRECIO = ?, ESPECIFICACIONES = ?, TIPO_PRODUCTO = ?
+                WHERE ID = ?;";
+        return $this->ejecutarConsulta($sql, $this->extraerDatosProducto($productosDTO, true));
+    }
+    public function eliminarProducto($id) {
+        $sql = "DELETE FROM productos WHERE ID = ?;";
+        return $this->ejecutarConsulta($sql, [$id]);
+    }
+}

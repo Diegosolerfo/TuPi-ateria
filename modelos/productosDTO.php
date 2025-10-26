@@ -7,7 +7,7 @@ class ProductosDTO {
         private $descripcion;
         private $precio;
         private $especificaciones;
-        private $tipo_producto;
+        private $tipoProducto;
 
         public function getId(){
             return $this->id;
@@ -40,9 +40,10 @@ class ProductosDTO {
             return $this->especificaciones;
         }
         public function getTipoProducto(){
-            return $this->tipo_producto;
+            return $this->tipoProducto;
         }
-        public function setTipoProducto($tipo_producto){
-            $this->tipo_producto = $tipo_producto;
+        public function setTipoProducto($tipoProducto){
+            $this->tipoProducto = $tipoProducto;
         }
     }
+    

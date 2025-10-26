@@ -1,9 +1,10 @@
 <?php
-namespace App\controladores;
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\modelos\TiposDAO;
 use App\modelos\TiposDTO;
 use App\modelos\Conexion;
+    $url = "Location: ../vista/tiposdeproductos.php?error=";
         if($_POST["accion"] == "registrar"){
         $tiposDTO = new TiposDTO();
         $tiposDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
@@ -11,11 +12,11 @@ use App\modelos\Conexion;
         $tiposDTO->setEvento($_POST["evento"]);
 
         $tiposDAO = new TiposDAO();
-        $resultado = $tiposDAO->registrar_tipo($tiposDTO);
+        $resultado = $tiposDAO->registrarTipo($tiposDTO);
         if($resultado === true){
             header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo registrado exitosamente");
         }else{
-            header("Location: ../vista/tiposdeproductos.php?error=" . urlencode($resultado));
+            header($url . urlencode($resultado));
         }
     }
     elseif($_POST["accion"] == "editar"){
@@ -26,20 +27,20 @@ use App\modelos\Conexion;
         $tiposDTO->setEvento(htmlspecialchars(trim($_POST["evento"]), ENT_QUOTES, 'UTF-8'));
 
         $tiposDAO = new TiposDAO();
-        $resultado = $tiposDAO->actualizar_tipo($tiposDTO);
+        $resultado = $tiposDAO->actualizarTipo($tiposDTO);
         if($resultado === true){
             header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo actualizado exitosamente");
         }else{
-            header("Location: ../vista/tiposdeproductos.php?error=" . urlencode($resultado));
+            header($url . urlencode($resultado));
         }
     } elseif($_POST["accion"] == "eliminar"){
         $id = $_POST["id"];
         $tiposDAO = new TiposDAO();
-        $resultado = $tiposDAO->eliminar_tipo($id);
+        $resultado = $tiposDAO->eliminarTipo($id);
         if($resultado === true){
                 header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo eliminado exitosamente");
             }else{
-                header("Location: ../vista/tiposdeproductos.php?error=" . urlencode($resultado));
+                header($url . urlencode($resultado));
             }
         }
     

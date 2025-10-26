@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\modelos\TiposDAO;
 
 $tiposDAO = new TiposDAO();
-$tipos = $tiposDAO->listar_tipos();
+$tipos = $tiposDAO->listarTipos();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +17,7 @@ $tipos = $tiposDAO->listar_tipos();
 </head>
 <body>
     <div class="container navbar-expand-lg navegador">
-        <?php include 'menu.php'; ?>
+        <?php require_once 'menu.php'; ?>
     </div>
     <div class="container es1">
         <div style="margin: 20px;">
@@ -52,9 +52,8 @@ $tipos = $tiposDAO->listar_tipos();
             </thead>
             <tbody>
                 <?php
-                require_once '../modelos/tiposDAO.php';
-                $tiposDAO = new tiposdao();
-                $tipos = $tiposDAO->listar_tipos();
+                $tiposDAO = new TiposDAO();
+                $tipos = $tiposDAO->listarTipos();
                 foreach ($tipos as $tipoproducto) {
                     echo "<tr>";
                     echo "<td>" . $tipoproducto['id'] . "</td>";

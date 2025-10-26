@@ -15,7 +15,7 @@ use App\modelos\ProductosDAO;
 </head>
 <body>
     <div class="container navbar-expand-lg  navegador">
-        <?php include 'menu.php'; ?>
+        <?php require_once 'menu.php'; ?>
     </div>
     <div class="container es1">
         <div style="margin: 20px;">
@@ -39,7 +39,7 @@ use App\modelos\ProductosDAO;
                 </div>
                 <?php
                     $objeto = new TiposDAO();
-                    $respuesta = $objeto->listar_tipos();
+                    $respuesta = $objeto->listarTipos();
                 ?>
                 <div class="mb-3">
                     <label for="tipo_producto" class="form-label">Tipo de Producto:</label>
@@ -70,9 +70,8 @@ use App\modelos\ProductosDAO;
             </thead>
             <tbody>
                 <?php
-                require_once '../modelos/productosDAO.php';
-                $productosDAO = new productosdao();
-                $productos = $productosDAO->listar_productos();
+                $productosDAO = new ProductosDAO();
+                $productos = $productosDAO->listarProductos();
                 foreach ($productos as $producto) {
                     echo "<tr>";
                     echo "<td>" . $producto['id'] . "</td>";
