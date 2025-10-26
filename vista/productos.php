@@ -4,14 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos</title>
-    <link rel="stylesheet" href="../estilos.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container navbar-expand-lg  navegador">
-        <?php include 'menu.php'; ?>
+    <div class="container navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="productos.php">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tiposdeproductos.php">Tipos de productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="container es1">
+    <div class="container">
         <div style="margin: 20px;">
             <h2>Registrar Producto</h2>
             <form action="../controladores/productosController.php" method="POST">
@@ -51,7 +64,7 @@
             </form>
         </div>
         <h2>Lista de Productos</h2>
-        <table class="table bordered table-striped tabla">
+        <table class="table bordered table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
