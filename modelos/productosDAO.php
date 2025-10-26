@@ -70,3 +70,4 @@ class ProductosDAO {
         return $this->ejecutarConsulta($sql, [$id]);
     }
 }
+

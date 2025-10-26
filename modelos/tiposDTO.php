@@ -33,4 +33,4 @@ class TiposDTO {
             $this->descripcion = $descripcion;
         }
     }
-    
+

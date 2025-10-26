@@ -38,9 +38,9 @@ use App\modelos\Conexion;
         $tiposDAO = new TiposDAO();
         $resultado = $tiposDAO->eliminarTipo($id);
         if($resultado === true){
-                header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo eliminado exitosamente");
-            }else{
-                header($url . urlencode($resultado));
-            }
+            header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo eliminado exitosamente");
+        }else{
+            header($url . urlencode($resultado));
         }
-    
+    }
+

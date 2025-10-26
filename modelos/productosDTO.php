@@ -46,4 +46,4 @@ class ProductosDTO {
             $this->tipoProducto = $tipoProducto;
         }
     }
-    
+

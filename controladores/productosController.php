@@ -43,9 +43,9 @@ use App\modelos\Conexion;
         $productosDAO = new ProductosDAO();
         $resultado = $productosDAO->eliminarProducto($id);
         if($resultado === true){
-                header("Location: ../vista/productos.php?mensaje=Producto eliminado exitosamente");
-            }else{
-                header($url . urlencode($resultado));
-            }
+            header("Location: ../vista/productos.php?mensaje=Producto eliminado exitosamente");
+        }else{
+            header($url . urlencode($resultado));
         }
-    
+    }
+

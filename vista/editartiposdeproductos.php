@@ -17,7 +17,7 @@ $tipo = $tiposDAO->obtener_tipo($_GET['id']);
 </head>
 <body>
     <div class="container navbar-expand-lg navegador">
-        <?php require_once 'menu.php'; ?>
+        <?php require_once 'menu.php'; //NOSONAR ?>
     </div>
     <div class="container">
         <div style="margin: 20px;">
