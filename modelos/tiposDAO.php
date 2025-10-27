@@ -5,6 +5,7 @@ use PDO;
 use PDOException;
 use App\modelos\Conexion;
 use App\modelos\TiposDTO;
+use App\modelos\DaoException;
 
 class TiposDAO {
     private $conexion;
@@ -45,7 +46,8 @@ class TiposDAO {
                 }
                 return true;
             } catch (PDOException $e) {
-                return "Error al registrar tipo de producto: " . $e->getMessage();
+                // Lanzamos una excepción dedicada para que la capa superior la maneje
+                throw new DaoException("Error al registrar tipo de producto: " . $e->getMessage(), 0, $e);
             }
         }
         public function obtenerTipo($id) {
@@ -65,7 +67,7 @@ class TiposDAO {
                 }
                 return $resultado;
             } catch (PDOException $e) {
-                return "Error al obtener producto: " . $e->getMessage();
+                throw new DaoException("Error al obtener tipo: " . $e->getMessage(), 0, $e);
             }
         }
         public function listarTipos() {
@@ -80,7 +82,7 @@ class TiposDAO {
                 }
                 return $resultados;
             } catch (PDOException $e) {
-                return "Error al listar tipos de productos: " . $e->getMessage();
+                throw new DaoException("Error al listar tipos de productos: " . $e->getMessage(), 0, $e);
             }
         }
         public function actualizarTipo(TiposDTO $tipo) {
@@ -104,7 +106,7 @@ class TiposDAO {
                 }
                 return true;
             } catch (PDOException $e) {
-                return "Error al actualizar tipo: " . $e->getMessage();
+                throw new DaoException("Error al actualizar tipo: " . $e->getMessage(), 0, $e);
             }
         }
         public function eliminarTipo($id) {
@@ -126,7 +128,7 @@ class TiposDAO {
                 }
                 return true;
             } catch (PDOException $e) {
-                return "Error al eliminar producto: " . $e->getMessage();
+                throw new DaoException("Error al eliminar tipo: " . $e->getMessage(), 0, $e);
             }
         }
     }

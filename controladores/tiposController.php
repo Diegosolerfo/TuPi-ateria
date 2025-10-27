@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\modelos\TiposDAO;
 use App\modelos\TiposDTO;
 use App\modelos\Conexion;
+use App\modelos\DaoException;
     $url = "Location: ../vista/tiposdeproductos.php?error=";
         if(!isset($_POST["accion"])) {
     header($url . "Acción no especificada");
@@ -17,11 +18,14 @@ if($_POST["accion"] == "registrar"){
         $tiposDTO->setEvento($_POST["evento"] ?? '');
 
         $tiposDAO = new TiposDAO();
-        $resultado = $tiposDAO->registrarTipo($tiposDTO);
-        if($resultado === true){
-            header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo registrado exitosamente");
-        }else{
-            header($url . urlencode($resultado));
+        try {
+            $resultado = $tiposDAO->registrarTipo($tiposDTO);
+            if ($resultado === true) {
+                header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo registrado exitosamente");
+            }
+        } catch (DaoException $e) {
+            header($url . urlencode($e->getMessage()));
+            exit();
         }
     }
     elseif($_POST["accion"] == "editar"){
@@ -32,11 +36,14 @@ if($_POST["accion"] == "registrar"){
         $tiposDTO->setEvento($_POST["evento"] ?? '');
 
         $tiposDAO = new TiposDAO();
-        $resultado = $tiposDAO->actualizarTipo($tiposDTO);
-        if($resultado === true){
-            header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo actualizado exitosamente");
-        }else{
-            header($url . urlencode($resultado));
+        try {
+            $resultado = $tiposDAO->actualizarTipo($tiposDTO);
+            if ($resultado === true) {
+                header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo actualizado exitosamente");
+            }
+        } catch (DaoException $e) {
+            header($url . urlencode($e->getMessage()));
+            exit();
         }
     } elseif($_POST["accion"] == "eliminar"){
         if (!isset($_POST["id"])) {
@@ -45,11 +52,14 @@ if($_POST["accion"] == "registrar"){
         }
         $id = $_POST["id"];
         $tiposDAO = new TiposDAO();
-        $resultado = $tiposDAO->eliminarTipo($id);
-        if($resultado === true){
-            header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo eliminado exitosamente");
-        }else{
-            header($url . urlencode($resultado));
+        try {
+            $resultado = $tiposDAO->eliminarTipo($id);
+            if ($resultado === true) {
+                header("Location: ../vista/tiposdeproductos.php?mensaje=Tipo eliminado exitosamente");
+            }
+        } catch (DaoException $e) {
+            header($url . urlencode($e->getMessage()));
+            exit();
         }
     }
 

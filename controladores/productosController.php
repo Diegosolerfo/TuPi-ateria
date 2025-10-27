@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\modelos\ProductosDAO;
 use App\modelos\ProductosDTO;
 use App\modelos\Conexion;
+use App\modelos\DaoException;
 
     $url = "Location: ../vista/productos.php?error=";
         if(!isset($_POST["accion"])) {
@@ -20,11 +21,14 @@ if($_POST["accion"] == "registrar"){
         $productosDTO->setTipoProducto($_POST["Tipo_Producto"] ?? '');
 
         $productosDAO = new ProductosDAO();
-        $resultado = $productosDAO->registrarProducto($productosDTO);
-        if($resultado === true){
-            header("Location: ../vista/productos.php?mensaje=Producto registrado exitosamente");
-        }else{
-            header($url . urlencode($resultado));
+        try {
+            $resultado = $productosDAO->registrarProducto($productosDTO);
+            if ($resultado === true) {
+                header("Location: ../vista/productos.php?mensaje=Producto registrado exitosamente");
+            }
+        } catch (DaoException $e) {
+            header($url . urlencode($e->getMessage()));
+            exit();
         }
     }
     elseif($_POST["accion"] == "editar"){
@@ -37,20 +41,26 @@ if($_POST["accion"] == "registrar"){
         $productosDTO->setTipoProducto(htmlspecialchars(trim($_POST["Tipo_Producto"]), ENT_QUOTES, 'UTF-8'));
 
         $productosDAO = new ProductosDAO();
-        $resultado = $productosDAO->actualizarProducto($productosDTO);
-        if($resultado === true){
-            header("Location: ../vista/productos.php?mensaje=Producto actualizado exitosamente");
-        }else{
-            header($url . urlencode($resultado));
+        try {
+            $resultado = $productosDAO->actualizarProducto($productosDTO);
+            if ($resultado === true) {
+                header("Location: ../vista/productos.php?mensaje=Producto actualizado exitosamente");
+            }
+        } catch (DaoException $e) {
+            header($url . urlencode($e->getMessage()));
+            exit();
         }
     } elseif($_POST["accion"] == "eliminar"){
         $id = $_POST["id"];
         $productosDAO = new ProductosDAO();
-        $resultado = $productosDAO->eliminarProducto($id);
-        if($resultado === true){
-            header("Location: ../vista/productos.php?mensaje=Producto eliminado exitosamente");
-        }else{
-            header($url . urlencode($resultado));
+        try {
+            $resultado = $productosDAO->eliminarProducto($id);
+            if ($resultado === true) {
+                header("Location: ../vista/productos.php?mensaje=Producto eliminado exitosamente");
+            }
+        } catch (DaoException $e) {
+            header($url . urlencode($e->getMessage()));
+            exit();
         }
     }
 

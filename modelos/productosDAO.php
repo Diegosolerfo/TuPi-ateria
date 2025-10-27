@@ -5,6 +5,7 @@ use PDO;
 use PDOException;
 use App\modelos\Conexion;
 use App\modelos\ProductosDTO;
+use App\modelos\DaoException;
 
 class ProductosDAO {
     private $conexion;
@@ -22,7 +23,7 @@ class ProductosDAO {
 
             return true;
         } catch (PDOException $e) {
-            return "Error en la consulta: " . $e->getMessage();
+            throw new DaoException("Error en la consulta: " . $e->getMessage(), 0, $e);
         }
     }
     private function extraerDatosProducto(ProductosDTO $p, bool $incluirId = false): array {
@@ -52,7 +53,7 @@ class ProductosDAO {
             $stmt->execute([$id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            return "Error al obtener producto: " . $e->getMessage();
+            throw new DaoException("Error al obtener producto: " . $e->getMessage(), 0, $e);
         }
     }
     public function listarProductos() {
