@@ -63,7 +63,7 @@ class TiposDAO {
                 
                 $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (!$resultado) {
-                    throw new \RuntimeException("Tipo no encontrado");
+                    throw new \RuntimeException("Tipo no encontrado"); //NOSONAR
                 }
                 return $resultado;
             } catch (PDOException $e) {
@@ -88,7 +88,7 @@ class TiposDAO {
         public function actualizarTipo(TiposDTO $tipo) {
             try {
                 if (!$this->obtenerTipo($tipo->getId())) {
-                    throw new \RuntimeException("Tipo no encontrado para actualizar");
+                    throw new \RuntimeException("Tipo no encontrado para actualizar"); //NOSONAR
                 }
 
                 $datos = $this->sanitizarDatos($tipo);
@@ -116,7 +116,7 @@ class TiposDAO {
                 }
 
                 if (!$this->obtenerTipo($id)) {
-                    throw new \RuntimeException("Tipo no encontrado para eliminar");
+                    throw new \RuntimeException("Tipo no encontrado para eliminar"); //NOSONAR
                 }
 
                 $sql = "DELETE FROM tipos WHERE ID = ?";

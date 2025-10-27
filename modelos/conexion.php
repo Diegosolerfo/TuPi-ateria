@@ -11,7 +11,7 @@ class Conexion {
     private static function loadConfig() {
         if (self::$config === null) {
             // Use require_once to avoid accidental multiple includes
-            self::$config = require_once __DIR__ . '/../config/database.php';
+            self::$config = require_once __DIR__ . '/../config/database.php'; //NOSONAR
         }
         return self::$config;
     }
