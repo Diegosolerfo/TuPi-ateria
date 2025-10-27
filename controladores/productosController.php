@@ -6,18 +6,13 @@ use App\modelos\ProductosDTO;
 use App\modelos\Conexion;
 
     $url = "Location: ../vista/productos.php?error=";
-        if(!isset($_POST["accion"])) {
-    header($url . "Acción no especificada");
-    exit();
-}
-
-if($_POST["accion"] == "registrar"){
+        if($_POST["accion"] == "registrar"){
         $productosDTO = new ProductosDTO();
-        $productosDTO->setNombre($_POST["nombre"] ?? '');
-        $productosDTO->setDescripcion($_POST["descripcion"] ?? '');
-        $productosDTO->setPrecio($_POST["precio"] ?? 0);
-        $productosDTO->setEspecificaciones($_POST["especificaciones"] ?? '');
-        $productosDTO->setTipoProducto($_POST["Tipo_Producto"] ?? '');
+        $productosDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setDescripcion(htmlspecialchars(trim($_POST["descripcion"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setPrecio(filter_var($_POST["precio"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
+        $productosDTO->setEspecificaciones(htmlspecialchars(trim($_POST["especificaciones"]), ENT_QUOTES, 'UTF-8'));
+        $productosDTO->setTipoProducto(htmlspecialchars(trim($_POST["Tipo_Producto"]), ENT_QUOTES, 'UTF-8'));
 
         $productosDAO = new ProductosDAO();
         $resultado = $productosDAO->registrarProducto($productosDTO);

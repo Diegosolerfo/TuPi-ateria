@@ -27,11 +27,11 @@ class ProductosDAO {
     }
     private function extraerDatosProducto(ProductosDTO $p, bool $incluirId = false): array {
         $datos = [
-            htmlspecialchars(trim($p->getNombre()), ENT_QUOTES, 'UTF-8'),
-            htmlspecialchars(trim($p->getDescripcion()), ENT_QUOTES, 'UTF-8'),
-            filter_var($p->getPrecio(), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-            htmlspecialchars(trim($p->getEspecificaciones()), ENT_QUOTES, 'UTF-8'),
-            htmlspecialchars(trim($p->getTipoProducto()), ENT_QUOTES, 'UTF-8')
+            $p->getNombre(),
+            $p->getDescripcion(),
+            $p->getPrecio(),
+            $p->getEspecificaciones(),
+            $p->getTipoProducto()
         ];
 
         if ($incluirId) {
