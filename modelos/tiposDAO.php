@@ -11,65 +11,120 @@ class TiposDAO {
     public function __construct() {
         $this->conexion = Conexion::getConexion();
     }
-    public function registrarTipo(TiposDTO $tipo){
-        $sql = "INSERT INTO tipos (NOMBRE, DESCRIPCION, EVENTO)
-                VALUES (?, ?, ?);";
-        try {
-            $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(1, $tipo->getNombre());
-            $stmt->bindParam(2, $tipo->getDescripcion());
-            $stmt->bindParam(3, $tipo->getEvento());
-            return $stmt->execute();
+        private function sanitizarDatos(TiposDTO $tipo) {
+            return [
+                'nombre' => htmlspecialchars(trim($tipo->getNombre()), ENT_QUOTES, 'UTF-8'),
+                'descripcion' => htmlspecialchars(trim($tipo->getDescripcion()), ENT_QUOTES, 'UTF-8'),
+                'evento' => htmlspecialchars(trim($tipo->getEvento()), ENT_QUOTES, 'UTF-8')
+            ];
+        }
+
+        private function validarDatos(array $datos) {
+            if (empty($datos['nombre'])) {
+                throw new \InvalidArgumentException("El nombre es requerido");
+            }
+            if (strlen($datos['nombre']) > 100) {
+                throw new \InvalidArgumentException("El nombre no puede exceder los 100 caracteres");
+            }
+            return true;
+        }
+
+        public function registrarTipo(TiposDTO $tipo) {
+            try {
+                $datos = $this->sanitizarDatos($tipo);
+                $this->validarDatos($datos);
+
+                $sql = "INSERT INTO tipos (NOMBRE, DESCRIPCION, EVENTO) VALUES (?, ?, ?)";
+                $stmt = $this->conexion->prepare($sql);
+                $stmt->bindParam(1, $datos['nombre']);
+                $stmt->bindParam(2, $datos['descripcion']);
+                $stmt->bindParam(3, $datos['evento']);
+                
+                if (!$stmt->execute()) {
+                    throw new \PDOException("Error al ejecutar la consulta");
+                }
+                return true;
             } catch (PDOException $e) {
                 return "Error al registrar tipo de producto: " . $e->getMessage();
             }
         }
         public function obtenerTipo($id) {
-            $sql = "SELECT * FROM tipos WHERE ID = ?;";
+            if (!is_numeric($id) || $id <= 0) {
+                throw new \InvalidArgumentException("ID inválido");
+            }
+
+            $sql = "SELECT * FROM tipos WHERE ID = ?";
             try {
                 $stmt = $this->conexion->prepare($sql);
-                $stmt->bindParam(1, $id);
+                $stmt->bindParam(1, $id, PDO::PARAM_INT);
                 $stmt->execute();
-                return $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (!$resultado) {
+                    throw new \RuntimeException("Tipo no encontrado");
+                }
+                return $resultado;
             } catch (PDOException $e) {
                 return "Error al obtener producto: " . $e->getMessage();
             }
         }
         public function listarTipos() {
-            $sql = "SELECT * FROM tipos;";
+            $sql = "SELECT * FROM tipos ORDER BY NOMBRE ASC";
             try {
                 $stmt = $this->conexion->prepare($sql);
                 $stmt->execute();
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                if (!$resultados) {
+                    return [];
+                }
+                return $resultados;
             } catch (PDOException $e) {
                 return "Error al listar tipos de productos: " . $e->getMessage();
             }
         }
-        public function actualizarTipo(TiposDTO $tipo){
-            $id = $tipo->getId();
-            $nombre = $tipo->getNombre();
-            $descripcion = $tipo->getDescripcion();
-            $evento = $tipo->getEvento();
-            $sql = "UPDATE tipos
-                    SET NOMBRE = ?, DESCRIPCION = ?, EVENTO = ?
-                    WHERE ID = ?;";
+        public function actualizarTipo(TiposDTO $tipo) {
             try {
+                if (!$this->obtenerTipo($tipo->getId())) {
+                    throw new \RuntimeException("Tipo no encontrado para actualizar");
+                }
+
+                $datos = $this->sanitizarDatos($tipo);
+                $this->validarDatos($datos);
+
+                $sql = "UPDATE tipos SET NOMBRE = ?, DESCRIPCION = ?, EVENTO = ? WHERE ID = ?";
                 $stmt = $this->conexion->prepare($sql);
-                $stmt->bindParam(1, $nombre);
-                $stmt->bindParam(2, $descripcion);
-                $stmt->bindParam(3, $evento);
-                $stmt->bindParam(4, $id);
-                return $stmt->execute();
+                $stmt->bindParam(1, $datos['nombre']);
+                $stmt->bindParam(2, $datos['descripcion']);
+                $stmt->bindParam(3, $datos['evento']);
+                $stmt->bindParam(4, $tipo->getId(), PDO::PARAM_INT);
+
+                if (!$stmt->execute()) {
+                    throw new \PDOException("Error al ejecutar la actualización");
+                }
+                return true;
             } catch (PDOException $e) {
                 return "Error al actualizar tipo: " . $e->getMessage();
             }
         }
-        public function eliminarTipo($id){
-            $sql = "DELETE FROM tipos WHERE ID = ?;";
+        public function eliminarTipo($id) {
             try {
+                if (!is_numeric($id) || $id <= 0) {
+                    throw new \InvalidArgumentException("ID inválido");
+                }
+
+                if (!$this->obtenerTipo($id)) {
+                    throw new \RuntimeException("Tipo no encontrado para eliminar");
+                }
+
+                $sql = "DELETE FROM tipos WHERE ID = ?";
                 $stmt = $this->conexion->prepare($sql);
-                $stmt->bindParam(1, $id);
-                return $stmt->execute();
+                $stmt->bindParam(1, $id, PDO::PARAM_INT);
+                
+                if (!$stmt->execute()) {
+                    throw new \PDOException("Error al ejecutar la eliminación");
+                }
+                return true;
             } catch (PDOException $e) {
                 return "Error al eliminar producto: " . $e->getMessage();
             }

@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\modelos\TiposDAO;
 
 $tiposDAO = new TiposDAO();
-$tipo = $tiposDAO->obtener_tipo($_GET['id']);
+$tipo = $tiposDAO->obtenerTipo($_GET['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">

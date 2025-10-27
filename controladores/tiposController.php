@@ -5,11 +5,16 @@ use App\modelos\TiposDAO;
 use App\modelos\TiposDTO;
 use App\modelos\Conexion;
     $url = "Location: ../vista/tiposdeproductos.php?error=";
-        if($_POST["accion"] == "registrar"){
+        if(!isset($_POST["accion"])) {
+    header($url . "Acción no especificada");
+    exit();
+}
+
+if($_POST["accion"] == "registrar"){
         $tiposDTO = new TiposDTO();
-        $tiposDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
-        $tiposDTO->setDescripcion($_POST["descripcion"]);
-        $tiposDTO->setEvento($_POST["evento"]);
+        $tiposDTO->setNombre($_POST["nombre"] ?? '');
+        $tiposDTO->setDescripcion($_POST["descripcion"] ?? '');
+        $tiposDTO->setEvento($_POST["evento"] ?? '');
 
         $tiposDAO = new TiposDAO();
         $resultado = $tiposDAO->registrarTipo($tiposDTO);
@@ -21,10 +26,10 @@ use App\modelos\Conexion;
     }
     elseif($_POST["accion"] == "editar"){
         $tiposDTO = new TiposDTO();
-        $tiposDTO->setId($_POST["id"]);
-        $tiposDTO->setNombre(htmlspecialchars(trim($_POST["nombre"]), ENT_QUOTES, 'UTF-8'));
-        $tiposDTO->setDescripcion(htmlspecialchars(trim($_POST["descripcion"]), ENT_QUOTES, 'UTF-8'));
-        $tiposDTO->setEvento(htmlspecialchars(trim($_POST["evento"]), ENT_QUOTES, 'UTF-8'));
+        $tiposDTO->setId($_POST["id"] ?? 0);
+        $tiposDTO->setNombre($_POST["nombre"] ?? '');
+        $tiposDTO->setDescripcion($_POST["descripcion"] ?? '');
+        $tiposDTO->setEvento($_POST["evento"] ?? '');
 
         $tiposDAO = new TiposDAO();
         $resultado = $tiposDAO->actualizarTipo($tiposDTO);
@@ -34,6 +39,10 @@ use App\modelos\Conexion;
             header($url . urlencode($resultado));
         }
     } elseif($_POST["accion"] == "eliminar"){
+        if (!isset($_POST["id"])) {
+            header($url . "ID no especificado");
+            exit();
+        }
         $id = $_POST["id"];
         $tiposDAO = new TiposDAO();
         $resultado = $tiposDAO->eliminarTipo($id);
