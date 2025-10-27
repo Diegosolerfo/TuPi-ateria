@@ -3,7 +3,7 @@ return [
     'host' => 'localhost',
     'dbname' => 'proyecto_pi',
     'username' => 'root',
-    'password' => 'contra123P*w', // Dejar vacío o poner la contraseña que uses localmente
+    'password' => 'contra123P*w',
     'charset' => 'utf8mb4',
     'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
